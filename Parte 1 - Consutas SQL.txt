@@ -1,0 +1,15 @@
+Consultas SQL
+Realizar las consultas SQL necesarias para obtener los siguientes datos:
+• Todos los productos del rubro "librería", creados hoy.
+SELECT * FROM `producto` INNER JOIN rubro ON rubro.id_rubro = producto.id_rubro WHERE producto.fecha_creacion = '20220831' AND rubro.rubro LIKE 'libreria';
+• Monto total vendido por cliente (mostrar nombre del cliente y monto).
+SELECT cliente.nombre, SUM((venta.precio_unitario * venta.cantidad)) AS 'Monto total' FROM cliente INNER JOIN venta ON cliente.id_cliente = venta.id_cliente GROUP BY cliente.id_cliente;
+• Cantidad de ventas por producto.
+SELECT SUM(venta.cantidad) AS 'Cant. de Prod.', producto.nombre FROM venta INNER JOIN producto ON venta.codigo_producto = producto.codigo GROUP BY producto.codigo;
+• Cantidad de productos comprados por cliente en el mes actual.
+SELECT SUM(venta.cantidad) AS 'Cant. de Prod Comprados', cliente.nombre, cliente.apellido FROM venta INNER JOIN cliente ON venta.id_cliente = cliente.id_cliente WHERE venta.fecha BETWEEN '20220801' AND '20220831' GROUP BY venta.id_cliente
+• Ventas que tienen al menos un producto del rubro "bazar".
+SELECT * FROM venta INNER JOIN producto ON venta.codigo_producto = producto.codigo INNER JOIN rubro ON producto.id_rubro = rubro.id_rubro WHERE rubro.rubro LIKE 'Bazar'
+• Rubros que no tienen ventas en los últimos 2 meses.
+SELECT rubro.rubro AS 'Rubro sin ventas' FROM rubro INNER JOIN producto ON producto.id_rubro = rubro.id_rubro INNER JOIN venta ON producto.codigo = venta.codigo_producto WHERE NOT venta.fecha > '20220631'
+
