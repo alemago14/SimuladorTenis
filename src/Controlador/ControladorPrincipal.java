@@ -65,6 +65,11 @@ public class ControladorPrincipal {
 	// cada juego
 	public int sumarPunto(int punto) {
 		int juego = 0;
+		
+		if(puntajej1 == "0" && puntajej2 == "0") {
+			System.out.print("\n\n\n\n\n\n\n\n\n");
+			mostrarPuntaje();
+		}
 
 		if(punto == 1) {
 			if (puntajej1 == "0") {
@@ -128,11 +133,18 @@ public class ControladorPrincipal {
 			}
 		}
 		
+		System.out.print("\n\n\n\n\n\n\n\n\n");
+		mostrarPuntaje();
+		
+		return juego;
+	}
+	
+	//Mostrar el puntaje actual del partido
+	public void mostrarPuntaje() {
 		System.out.println(j1.getNombre() + " " + j1.mostrarSaque());
 		System.out.println("J1 Puntaje: " + puntajej1 + "|| Set:  | "+ juegoj1+"|");
 		System.out.println("J2 Puntaje: " + puntajej2 + "|| Set:  | "+ juegoj2+"|");
 		System.out.println(j2.getNombre() + " " + j2.mostrarSaque());
-		return juego;
 	}
 
 	// Metodo para esperar un segundo
@@ -211,22 +223,24 @@ public class ControladorPrincipal {
 		
 		int ganador = ganadorEs();
 		
-		System.out.print("J1: "+ j1.getNombre()+ " - ");
+		System.out.print("");
 		for (Integer numero : set1) {
 			System.out.print("|"+numero);
 		}
+		System.out.print("|	J1: "+ j1.getNombre());
 		if(ganador == 1) {
-			System.out.print(" Ganador.");
+			System.out.print(" - Ganador.");
 		}
-		
 		System.out.println("");
+		System.out.println("----------------------------------------");
 		
-		System.out.print("J2: "+ j2.getNombre()+ " - ");
+		
 		for (Integer numero : set2) {
 			System.out.print("|"+numero);
 		}
+		System.out.print("|	J2: "+ j2.getNombre());
 		if(ganador == 2) {
-			System.out.print(" Ganador.");
+			System.out.print(" - Ganador.");
 		}
 	}
 	
@@ -256,6 +270,7 @@ public class ControladorPrincipal {
 	//metodo para ver el resultado de la semifinal y devuelve el jugador ganador
 	public Jugador semifinal() {
 		Jugador pasa;
+		System.out.print("\n\n\n\n\n\n\n\n\n");
 		System.out.println("Semifinal			|Torneo: "+torneo.getNombre());
 		
 		int ganador = ganadorEs();
@@ -264,6 +279,113 @@ public class ControladorPrincipal {
 		}else {
 			pasa = j2;
 		}
+		
+		System.out.print("");
+		for (Integer numero : set1) {
+			System.out.print("|"+numero);
+		}
+		System.out.print("|	J1: "+ j1.getNombre());
+		if(ganador == 1) {
+			System.out.print(" - Ganador.");
+		}
+		System.out.println("");
+		System.out.println("----------------------------------------");
+		
+		
+		for (Integer numero : set2) {
+			System.out.print("|"+numero);
+		}
+		System.out.print("|	J2: "+ j2.getNombre());
+		if(ganador == 2) {
+			System.out.print(" - Ganador.");
+		}
+		
+		System.out.println("");
+		return pasa;
+	}
+	
+	
+	//metodo que simula el partido individual de tenis
+	public void partidoIndividual() {
+		primerSaque();
+		int juego = 0;
+		int set = 0;
+		
+		for (int i = 0; i < torneo.getCantSets(); i++) {
+			do {
+				do {
+					System.out.print("\n\n\n\n\n\n\n\n\n");
+					mostrarPuntaje();
+					esperar();
+					juego = sumarPunto(calcularPunto());
+					esperar();
+				} while (juego == 0);
+				cambiarSaque();
+				sumarJuego(juego);
+				setearPuntajes();
+				set = ganarSet();
+				esperar();
+				esperar();
+				
+				System.out.print("\n\n\n\n\n\n\n\n\n");
+				
+			} while (set == 0);
+			sumarSet();
+			setearSet();
+		}
+		
+		System.out.print("\n\n\n\n\n\n\n\n\n");
+		mostrarSet();
+		esperar();
+		esperar();
+		
+		System.out.println("");
+		System.out.println("Ingrese 1 para repetir el partido");
+		System.out.println("O Ingrese cualquier otro numero para salir");
+	}
+	
+	public Jugador partidoSemifinal() {
+		primerSaque();
+		int juego = 0;
+		int set = 0;
+		Jugador jugadorSemi = new Jugador();
+		
+		for (int i = 0; i < torneo.getCantSets(); i++) {
+			do {
+				do {
+					juego = sumarPunto(calcularPunto());
+					esperar();
+				} while (juego == 0);
+				cambiarSaque();
+				sumarJuego(juego);
+				setearPuntajes();
+				set = ganarSet();
+				esperar();
+				esperar();
+				
+				System.out.print("\n\n\n\n\n\n\n\n\n");
+				
+			} while (set == 0);
+			sumarSet();
+			setearSet();
+		}
+		
+		System.out.print("\n\n\n\n\n\n\n\n\n");
+		System.out.print("\n\n\n\n\n\n\n\n\n");
+		jugadorSemi = semifinal();
+		esperar();
+		esperar();
+		
+		return jugadorSemi;
+	}
+	
+	/*
+	 * Marcador antiguo
+	 * //mostrar los set actuales
+	public void mostrarSet() {
+		System.out.println("Finalizado			|Torneo: "+torneo.getNombre());
+		
+		int ganador = ganadorEs();
 		
 		System.out.print("J1: "+ j1.getNombre()+ " - ");
 		for (Integer numero : set1) {
@@ -282,7 +404,6 @@ public class ControladorPrincipal {
 		if(ganador == 2) {
 			System.out.print(" Ganador.");
 		}
-		
-		return pasa;
 	}
+	 */
 }
